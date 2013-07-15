@@ -1,4 +1,4 @@
-package com.infteh.comboseekbar;
+package aca.survey.player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +24,20 @@ public class ComboSeekBar extends SeekBar {
 	private boolean isSelected = false;
 	private int mColor;
 	private int mTextSize;
+	private int mTextColor;
 	private boolean mIsMultiline;
 
+	Context appcontext;
+	
 	/**
 	 * @param context
 	 *            context.
 	 */
 	public ComboSeekBar(Context context) {
 		super(context);
+		
+		appcontext = context;
+		
 	}
 
 	/**
@@ -52,9 +58,9 @@ public class ComboSeekBar extends SeekBar {
 		a.recycle();
 		mThumb = new CustomThumbDrawable(context, mColor);
 		setThumb(mThumb);
-		setProgressDrawable(new CustomDrawable(this.getProgressDrawable(), this, mThumb.getRadius(), mDots, mColor, mTextSize, mIsMultiline));
+		setProgressDrawable(new CustomDrawable(this.getProgressDrawable(), this, mThumb.getRadius(), mDots, mColor, Color.BLACK, mTextSize, mIsMultiline));
 
-		// по умолчанию не равно 0 и это проблема
+		// Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ Ð½Ðµ Ñ€Ð°Ð²Ð½Ð¾ 0 Ð¸ Ñ�Ñ‚Ð¾ Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼Ð°
 		setPadding(0, 0, 0, 0);
 	}
 
@@ -71,9 +77,42 @@ public class ComboSeekBar extends SeekBar {
 	public void setColor(int color) {
 		mColor = color;
 		mThumb.setColor(color);
-		setProgressDrawable(new CustomDrawable((CustomDrawable) this.getProgressDrawable(), this, mThumb.getRadius(), mDots, color, mTextSize, mIsMultiline));
+		setProgressDrawable(new CustomDrawable((CustomDrawable) this.getProgressDrawable(), this, mThumb.getRadius(), mDots, color,Color.BLACK, mTextSize, mIsMultiline));
 	}
 
+	//  ACA
+	public void SetStyle(int l_Color,int l_TextColor,int s_Color,int l_TextSize,boolean l_IsMultiline) {
+
+		mColor = l_Color;
+		mTextSize = l_TextSize;
+		mIsMultiline = l_IsMultiline;
+		mTextColor  = l_TextColor;
+		
+		// do something with str
+		
+		mThumb = new CustomThumbDrawable(appcontext, s_Color); //mColor);
+		setThumb(mThumb);
+		setProgressDrawable(new CustomDrawable(this.getProgressDrawable(), this, mThumb.getRadius(), mDots, mColor, mTextColor, mTextSize, mIsMultiline));
+
+		// Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ Ð½Ðµ Ñ€Ð°Ð²Ð½Ð¾ 0 Ð¸ Ñ�Ñ‚Ð¾ Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼Ð°
+		setPadding(0, 0, 0, 0);
+	}
+
+	// ACA
+	public int getSelected() {
+		
+		int i;
+		i=0;
+		for (Dot dot : mDots) {
+			if (dot.isSelected) return i;
+			i++;
+		}
+			
+//		if (prevSelected == null) return 0;
+	//	if (prevSelected.isSelected) return prevSelected.id; 
+		return 0;
+	}
+	
 	public synchronized void setSelection(int position) {
 		if ((position < 0) || (position >= mDots.size())) {
 			throw new IllegalArgumentException("Position is out of bounds:" + position);
